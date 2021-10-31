@@ -1097,8 +1097,8 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
       case chunk       => Some(chunk.toArray(Chunk.classTagOf(self)))
     }
 
-  /** Converts a chunk of longs to a chunk of bits using the specified endianness */
-  final def longsAsBits(endianness: java.nio.ByteOrder)(implicit ev: A <:< Long): Chunk[Boolean] = {
+  /** Converts a chunk of longs to a chunk of bits using the specified endianness [[java.nio.ByteOrder]] */
+  final def longsAsBits(endianness: ByteOrder)(implicit ev: A <:< Long): Chunk[Boolean] = {
     println(endianness)
     Chunk.BitChunk(Chunk(1, 2), 0, length << 6)
   }

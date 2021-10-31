@@ -108,7 +108,7 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
     val byteChunk: Chunk[Byte] = self
       .map(ev)
       .flatMap(
-        java.nio.ByteBuffer
+        ByteBuffer
           .allocate(java.lang.Long.BYTES)
           .order(endian)
           .putLong(_)

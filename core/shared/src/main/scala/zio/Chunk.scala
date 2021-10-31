@@ -107,7 +107,7 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
     val byteChunk: Chunk[Byte] = self
       .map(ev)
       .flatMap(
-        ByteBuffer
+        java.nio.ByteBuffer
           .allocate(java.lang.Long.BYTES)
           .order(endian)
           .putLong(_)
@@ -115,23 +115,6 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
       )
 
     Chunk.BitChunk(byteChunk, 0, length << 6)
-  }
-
-  /**
-   * Converts a chunk of ints to a chunk of bits using the specified [[java.nio.ByteOrder endianness]].
-   */
-  final def intsAsBits(endian: ByteOrder)(implicit ev: A <:< Int): Chunk[Boolean] = {
-    val byteChunk: Chunk[Byte] = self
-      .map(ev)
-      .flatMap(
-        ByteBuffer
-          .allocate(Integer.BYTES)
-          .order(endian)
-          .putInt(_)
-          .array()
-      )
-
-    Chunk.BitChunk(byteChunk, 0, length << 5)
   }
 
   /**

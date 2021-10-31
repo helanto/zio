@@ -16,7 +16,7 @@
 
 package zio
 
-import java.nio.{ByteBuffer, _}
+import java.nio.{ByteBuffer, ByteOrder, CharBuffer, DoubleBuffer, FloatBuffer, IntBuffer, ShortBuffer, LongBuffer}
 import java.util.concurrent.atomic.AtomicInteger
 import scala.annotation.tailrec
 import scala.collection.mutable.Builder

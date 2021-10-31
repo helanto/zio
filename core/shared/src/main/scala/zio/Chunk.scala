@@ -16,7 +16,7 @@
 
 package zio
 
-import java.nio.{ByteBuffer, ByteOrder, CharBuffer, DoubleBuffer, FloatBuffer, IntBuffer, ShortBuffer, LongBuffer}
+import java.nio._
 import java.util.concurrent.atomic.AtomicInteger
 import scala.annotation.tailrec
 import scala.collection.mutable.Builder
@@ -107,8 +107,8 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
     val byteChunk: Chunk[Byte] = self
       .map(ev)
       .flatMap(
-        ByteBuffer
-          .allocate(java.lang.Long.BYTES)
+        Chunk
+          .allocateBuffer(java.lang.Long.BYTES)
           .order(endian)
           .putLong(_)
           .array()
@@ -1844,4 +1844,7 @@ object Chunk extends ChunkFactory with ChunkPlatformSpecific {
   final case class BooleanArray(array: Array[Boolean]) extends Arr[Boolean] {
     override def boolean(index: Int)(implicit ev: Boolean <:< Boolean): Boolean = array(index)
   }
+
+  private def allocateBuffer(size: Int): ByteBuffer =
+    ByteBuffer.allocate(size)
 }

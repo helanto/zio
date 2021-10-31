@@ -104,13 +104,14 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
   final def longsAsBits(endian: ByteOrder)(implicit ev: A <:< Long): Chunk[Boolean] = {
     val byteChunk: Chunk[Byte] = self
       .map(ev)
-      .flatMap(
-        ByteBuffer
+      .flatMap { num =>
+        val bb = ByteBuffer
           .allocate(java.lang.Long.BYTES)
           .order(endian)
-          .putLong(_)
-          .array()
-      )
+          .putLong(num)
+        bb.position(0)
+        Chunk.fromByteBuffer(bb)
+      }
 
     Chunk.BitChunk(byteChunk, 0, length << 6)
   }
@@ -119,13 +120,14 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
   final def intsAsBits(endian: ByteOrder)(implicit ev: A <:< Int): Chunk[Boolean] = {
     val byteChunk: Chunk[Byte] = self
       .map(ev)
-      .flatMap(
-        ByteBuffer
+      .flatMap { num =>
+        val bb = ByteBuffer
           .allocate(Integer.BYTES)
           .order(endian)
-          .putInt(_)
-          .array()
-      )
+          .putInt(num)
+        bb.position(0)
+        Chunk.fromByteBuffer(bb)
+      }
 
     Chunk.BitChunk(byteChunk, 0, length << 5)
   }

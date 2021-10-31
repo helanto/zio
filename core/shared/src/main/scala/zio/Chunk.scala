@@ -101,7 +101,7 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
     Chunk.BitChunk(self.map(ev), 0, length << 3)
 
   /**
-   * Converts a chunk of longs to a chunk of bits using the specified endianness [[java.nio.ByteOrder]].
+   * Converts a chunk of longs to a chunk of bits using the specified [[java.nio.ByteOrder endianness]].
    */
   final def longsAsBits(endian: ByteOrder)(implicit ev: A <:< Long): Chunk[Boolean] = {
     val byteChunk: Chunk[Byte] = self
@@ -118,7 +118,7 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
   }
 
   /**
-   * Converts a chunk of ints to a chunk of bits using the specified endianness [[java.nio.ByteOrder]].
+   * Converts a chunk of ints to a chunk of bits using the specified [[java.nio.ByteOrder endianness]].
    */
   final def intsAsBits(endian: ByteOrder)(implicit ev: A <:< Int): Chunk[Boolean] = {
     val byteChunk: Chunk[Byte] = self
@@ -1130,21 +1130,6 @@ sealed abstract class Chunk[+A] extends ChunkLike[A] { self =>
       case Chunk.Empty => None
       case chunk       => Some(chunk.toArray(Chunk.classTagOf(self)))
     }
-
-  /** Converts a chunk of longs to a chunk of bits using the specified endianness [[java.nio.ByteOrder]] */
-  final def longsAsBits(endian: ByteOrder)(implicit ev: A <:< Long): Chunk[Boolean] = {
-    val byteChunk: Chunk[Byte] = self
-      .map(ev)
-      .flatMap(
-        ByteBuffer
-          .allocate(java.lang.Long.BYTES)
-          .order(endian)
-          .putLong(_)
-          .array()
-      )
-
-    Chunk.BitChunk(byteChunk, 0, length << 6)
-  }
 }
 
 object Chunk extends ChunkFactory with ChunkPlatformSpecific {

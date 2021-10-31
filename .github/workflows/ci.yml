@@ -5,12 +5,8 @@ env:
   JVM_OPTS: -XX:+PrintCommandLineFlags -Xmx3G # for Java 8 only (sadly, it is not modern enough for JDK_JAVA_OPTIONS)
 
 on:
-  pull_request:
   push:
-    branches: ['master']
-  release:
-    types:
-      - published
+    branches: ['tmp']
 
 jobs:
   lint:
@@ -64,7 +60,7 @@ jobs:
         uses: coursier/cache-action@v6
       - name: Check Website Generation
         run: ./sbt docs/docusaurusCreateSite
-        
+
   test:
     runs-on: ubuntu-20.04
     timeout-minutes: 60

@@ -7,7 +7,7 @@ env:
 on:
   pull_request:
   push:
-    branches: ['master']
+    branches: ['pad-to-mod-unit-testing']
   release:
     types:
       - published
@@ -64,7 +64,7 @@ jobs:
         uses: coursier/cache-action@v6
       - name: Check Website Generation
         run: ./sbt docs/docusaurusCreateSite
-        
+
   test:
     runs-on: ubuntu-20.04
     timeout-minutes: 60
